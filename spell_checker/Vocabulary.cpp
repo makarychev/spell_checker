@@ -7,6 +7,7 @@
 #include <iostream>
 #endif
 
+using namespace std;
 
 CVocabulary* CVocabulary::pVocabularyInst = NULL;
 
@@ -24,13 +25,14 @@ CVocabulary::CVocabulary(void)
 	for (int i = 0; i < SCH_WORD_SIZE_MAX + 1; ++i)
 	{
 		str += " ";
-		vVocabulary.insert(pair<DWORD, string>(i, str));
+		vVocabulary.insert(pair<DWORD, string>(i, str)); //TODO: What a cheat?
 	}
 }
 
 
 CVocabulary::~CVocabulary(void)
 {
+	std::cout << "~CVocabulary FUUUKCKCKCKCKCCK!";
 }
 
 void CVocabulary::LoadFromFile(string filename)
@@ -46,10 +48,11 @@ void CVocabulary::LoadFromFile(string filename)
 
 	string strIn;
 	file >> strIn;
-	while (strcmp(strIn.c_str(), "==="))// || file.eof())
+	while (strcmp(strIn.c_str(), "==="))// || file.eof()) //TODO: optimize here?
 	{
 		transform(strIn.begin(), strIn.end(), strIn.begin(), ::tolower);
-		vVocabulary.insert(pair<DWORD, string>(strIn.length(), strIn));
+		vVocabulary.insert(pairByteStr(strIn.length(), strIn)); //TODO: such pair will be better to specify as typedef in header
+
 		file >> strIn;
 	}
 	file.close();
@@ -59,3 +62,6 @@ void CVocabulary::LoadFromFile(string filename)
 	printf( "\tLoading vocabulary takes %d millisecond.\n", t );	//debug
 #endif
 }
+
+
+// Reviewed by Dimitris 15/07/2013

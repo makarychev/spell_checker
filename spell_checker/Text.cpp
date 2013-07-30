@@ -2,6 +2,8 @@
 #include <fstream>
 
 
+using namespace std;
+
 CText* CText::pTextInst = NULL;
 
 CText *CText::getInstance()
@@ -48,7 +50,7 @@ void CText::LoadFromFile(string filename)
 		len = strIn.find(' ', pos);
 		while (len != 0)
 		{
-			mText.insert(pair<DWORD, string>(nLine, strIn.substr(pos, len)));
+			mText.insert(TextPair(nLine, strIn.substr(pos, len)));
 			pos += len + 1;
 			if (pos == 0)
 				break;

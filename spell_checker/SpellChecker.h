@@ -5,7 +5,7 @@
 #include "Text.h"
 #include <list>
 
-using namespace std;
+
 
 class CSpellChecker
 {
@@ -13,13 +13,12 @@ public:
 	CSpellChecker(void);
 	~CSpellChecker(void);
 
-	DWORD DamerauLevenshteinDistance(string source, string target);
-	void EvaluateRes(multimap<DWORD,string> *lStrRes);
+	DWORD EvaluateRes(TextContainer *lStrRes); // predefine typedef of multimap<DWORD, string>
 
 private:
 	CVocabulary *pVocabulary;
 	CText		*pText;
-
-	string GetWordRes(map<string, WORD> setRes, string sWord);
+	DWORD DamerauLevenshteinDistance(std::string source, std::string target, BYTE errCount); // TODO: should be changed by strategy pattern
+	std::string getResultWords(std::map<std::string, WORD> setRes, std::string sWord);
 };
 

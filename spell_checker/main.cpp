@@ -13,7 +13,9 @@
 #include <time.h>
 #endif
 
-void WriteResult(multimap<DWORD, string> *mResult, string filename)
+using namespace std;
+
+void WriteResult(TextContainer *mResult, string filename)
 {
 	fstream file;
 	DWORD nLine = 0;
@@ -21,7 +23,7 @@ void WriteResult(multimap<DWORD, string> *mResult, string filename)
 	if (!file.is_open())
 		throw "Output file is not open";
 	
-	for (multimap<DWORD, string>::iterator it = mResult->begin(); it != mResult->end(); ++it)
+	for (TextContainer::iterator it = mResult->begin(); it != mResult->end(); ++it)
 	{
 		if (nLine != (*it).first)
 		{
@@ -42,20 +44,25 @@ int main()
 		long t;							//debug
 		t = clock();					//debug
 #endif
-		multimap<DWORD, string> mResult;
-		shared_ptr<CSpellChecker> pSpellChecker (new CSpellChecker); 
+		TextContainer mResult;
+
+		{
+
+			shared_ptr<CSpellChecker> pSpellChecker (new CSpellChecker); 
 		
-		CVocabulary *pVocablurary = CVocabulary::getInstance();
-		pVocablurary->LoadFromFile(INPUT_FILE);
+			CVocabulary *pVocablurary = CVocabulary::getInstance();
+			pVocablurary->LoadFromFile(INPUT_FILE);
 
-		CText *pText = CText::getInstance();
-		pText->LoadFromFile(INPUT_FILE);
+			CText *pText = CText::getInstance();
+			pText->LoadFromFile(INPUT_FILE);
 
-		pSpellChecker->EvaluateRes(&mResult);
-		WriteResult(&mResult, OUTPUT_FILE);
+			DWORD result = pSpellChecker->EvaluateRes(&mResult);
+			printf( "\tEvaluateRes: %ld\n", result);	//debug
+			WriteResult(&mResult, OUTPUT_FILE);
+		}
 #ifdef _CONSOLE_
-		t = clock() - t;												//debug
-		printf( "\tLoading vocabulary takes %d millisecond.\n", t );	//debug
+		t = clock() - t; // single function delta meter					//debug 
+		printf( "\tProgram takes %d millisecond.\n", t );	//debug
 #endif
 	}
 	catch (const char* sErr)
